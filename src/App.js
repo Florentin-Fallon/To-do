@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import TaskList from "./components/TaskList";
 import AddTask from "./components/AddTask";
 import TaskCompleted from "./components/TaskCompleted";
-import TaskProgress from './components/TaskProgress';
 import { fetchTasks, deleteTask, completeTask } from './TaskReducer';
+import { Typography } from '@mui/material';
 
 function App() {
   const dispatch = useDispatch();
@@ -26,7 +26,7 @@ function App() {
 
   return (
     <div>
-      <h1 className='title'>Gestion des tâches avec Redux et Dexie !</h1>
+      <Typography variant='h4' className='title'>To-do List</Typography>
       <AddTask />
       <div className='table'>
         <div>
@@ -35,7 +35,6 @@ function App() {
         <div className='divider'></div>
         <div>
           <TaskCompleted complete={complete} onDeleteTask={handleDeleteTask} />
-          <TaskProgress tasks={tasks} onCompleteTask={handleCompleteTask} />
         </div>
       </div>
     </div>

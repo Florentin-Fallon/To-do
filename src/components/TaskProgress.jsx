@@ -8,18 +8,22 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
+import Switch from '@mui/material/Switch';
 
-function TaskProgress({ tasks}) {
+function TaskProgress({ tasks }) {
+  const [checked, setChecked] = React.useState({});
+  const dispatch = useDispatch();
 
-const dispatch = useDispatch()
+  const inProgressTask = tasks.filter(task => !task.completed);
 
-const inProgressTask = tasks.filter(task => !task.completed)
-
-const handleProgress = (id) => {
-  dispatch(completeTask(id))
-  alert("tâche terminée !")
-}
+  const handleProgress = (taskId) => {
+    setChecked(prevChecked => ({
+      ...prevChecked,
+      [taskId]: !prevChecked[taskId],
+    }));
+    dispatch(completeTask(taskId));
+    alert("tâche terminée !");
+  };
 
   return (
     <TableContainer component={Paper}>
@@ -35,11 +39,16 @@ const handleProgress = (id) => {
         </TableHead>
         <TableBody>
           {inProgressTask.map((task) => (
-            <TableRow key={task.id} sx={{'&:last-child td, &:last-child th': {border: 0} }}>
+            <TableRow key={task.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
               <TableCell align='center'>{task.date}</TableCell>
               <TableCell align='center'>{task.time}</TableCell>
               <TableCell align='center'>{task.title}</TableCell>
-              <TableCell><Button sx={{backgroundColor: 'green', color: 'white'}} onClick={() => handleProgress(task.id)}>Terminer</Button></TableCell>
+              <TableCell>
+                <Switch
+                  onChange={() => handleProgress(task.id)}
+                  checked={!!checked[task.id]}
+                />
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
